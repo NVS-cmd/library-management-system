@@ -19,3 +19,18 @@ public boolean removeBook(int id) {
     }
     return false;
 }
+public boolean updateBook(int id, Book newData) {
+    Optional<Book> bookToUpdate = books.stream()
+            .filter(b -> b.getId() == id)
+            .findFirst();
+
+    if (bookToUpdate.isPresent()) {
+        Book oldBook = bookToUpdate.get();
+        books.set(books.indexOf(oldBook), newData);
+        operationLog.addEntry(OperationLog.OperationType.ADD_BOOK,
+                String.format("Обновлена книга ID %d: %s -> %s",
+                        id, oldBook.getTitle(), newData.getTitle()));
+        return true;
+    }
+    return false;
+}
