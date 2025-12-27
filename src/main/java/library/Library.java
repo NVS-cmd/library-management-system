@@ -68,3 +68,16 @@ public class Library {
 
 }
 }
+public boolean removeBook(int id) {
+    Optional<Book> bookToRemove = books.stream()
+            .filter(b -> b.getId() == id)
+            .findFirst();
+
+    if (bookToRemove.isPresent()) {
+        books.remove(bookToRemove.get());
+        operationLog.addEntry(OperationLog.OperationType.ADD_BOOK,
+                "Удалена книга ID " + id + ": " + bookToRemove.get().getTitle());
+        return true;
+    }
+    return false;
+}
