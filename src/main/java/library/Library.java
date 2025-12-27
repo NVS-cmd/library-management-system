@@ -1,121 +1,26 @@
 package library;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class Library {
     private List<Book> books;
     private OperationLog operationLog;
 
-    // Вложенный статический класс OperationLog
-    public static class OperationLog {
-        // Внутренний класс LogEntry
-        public class LogEntry {
-            private OperationType type;
-            private LocalDateTime timestamp;
-            private String description;
-
-            public LogEntry(OperationType type, String description) {
-                this.type = type;
-                this.timestamp = LocalDateTime.now();
-                this.description = description;
-            }
-
-            public OperationType getType() { return type; }
-            public LocalDateTime getTimestamp() { return timestamp; }
-            public String getDescription() { return description; }
-
-            @Override
-            public String toString() {
-                return String.format("[%s] %s: %s",
-                        timestamp.format(java.time.format.DateTimeFormatter.ofPattern("dd.MM HH:mm:ss")),
-                        type, description);
-            }
-        }
-
-        public enum OperationType {
-            ADD_BOOK, BORROW, RETURN
-        }
-
-        private List<LogEntry> entries;
-
-        public OperationLog() {
-            this.entries = new ArrayList<>();
-        }
-
-        public void addEntry(OperationType type, String description) {
-            entries.add(new LogEntry(type, description));
-        }
-
-        public List<LogEntry> getEntries() {
-            return new ArrayList<>(entries);
-        }
-
-        public void printLog() {
-            System.out.println("=== Журнал операций ===");
-            if (entries.isEmpty()) {
-                System.out.println("Журнал пуст");
-            } else {
-                for (int i = 0; i < entries.size(); i++) {
-                    System.out.println((i + 1) + ". " + entries.get(i));
-                }
-            }
-            System.out.println();
-        }
-    }
-
     public Library() {
-        this.books = new ArrayList<>();
-        this.operationLog = new OperationLog();
+        // TODO: инициализация
     }
 
-    public void addBook(Book book) {
-        books.add(book);
-        operationLog.addEntry(OperationLog.OperationType.ADD_BOOK,
-                "Добавлена книга: " + book.getTitle());
-    }
+    // Заглушки методов
+    public void addBook(Book book) { /* TODO */ }
+    public Book findBookById(int id) { return null; }
+    public List<Book> findBooksByAuthor(String author) { return null; }
+    public boolean borrowBook(int id) { return false; }
+    public boolean returnBook(int id) { return false; }
+    public List<Book> getAvailableBooks() { return null; }
+    public void printOperationLog() { /* TODO */ }
 
-    public Book findBookById(int id) {
-        return books.stream()
-                .filter(b -> b.getId() == id)
-                .findFirst()
-                .orElse(null);
+    // Вложенный класс — пока пустой
+    public static class OperationLog {
+        // TODO: реализация
     }
-
-    public List<Book> findBooksByAuthor(String author) {
-        return books.stream()
-                .filter(b -> b.getAuthor().equalsIgnoreCase(author))
-                .toList();
-    }
-
-    public boolean borrowBook(int id) {
-        Book book = findBookById(id);
-        if (book != null && book.isAvailable()) {
-            book.setAvailable(false);
-            operationLog.addEntry(OperationLog.OperationType.BORROW,
-                    "Выдана книга ID " + id + ": " + book.getTitle());
-            return true;
-        }
-        return false;
-    }
-
-    public boolean returnBook(int id) {
-        Book book = findBookById(id);
-        if (book != null && !book.isAvailable()) {
-            book.setAvailable(true);
-            operationLog.addEntry(OperationLog.OperationType.RETURN,
-                    "Возвращена книга ID " + id + ": " + book.getTitle());
-            return true;
-        }
-        return false;
-    }
-
-    public List<Book> getAvailableBooks() {
-        return books.stream()
-                .filter(Book::isAvailable)
-                .toList();
-    }
-
-    public void print
+}
